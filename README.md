@@ -1,37 +1,101 @@
-## Welcome to GitHub Pages
+# Notenote.link
 
-You can use the [editor on GitHub](https://github.com/AnaelBerrouet/AnaelBerrouet.github.io/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+[![Netlify Status](https://api.netlify.com/api/v1/badges/7b37d412-1240-44dd-8539-a7001465b57a/deploy-status)](https://app.netlify.com/sites/notenotelink/deploys)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Update !
 
-### Markdown
+Hi everyone ! I recently updated the template so that you can now link headers : [[note#header\\|title]], which is done natively in Obsidian. Besides, there are now header links that appear on hover. As my notes get longer and longer, this functionnality became very necessary for meaningful linkings. If you see a bug, please open an issue about it !
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## What is this?
 
-```markdown
-Syntax highlighted code block
+A digital garden using a custom version of `simply-jekyll`, optimised for integration with [Obsidian](https://obsidian.md). It is more oriented on note-taking and aims to help you build a nice knowledge base that can scale with time. 
 
-# Header 1
-## Header 2
-### Header 3
+**Demo is here: [notenote.link](https://notenote.link)**
 
-- Bulleted
-- List
+If you want to see a more refined example, you can check my notes (in french) at [arboretum.link](https://www.arboretum.link/). Build time is approx. 15 seconds, FYI.
 
-1. Numbered
-2. List
+Issues are welcome, including feedback ! Don't hesitate to ask if you can't find a solution. 💫
 
-**Bold** and _Italic_ and `Code` text
+![screenshot](/assets/img/screenshot.png)
 
-[Link](url) and ![Image](src)
-```
+## What is different?
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+- Markdown is fully-compatible with Obsidian (including Latex delimiters!)
+- There are now only notes (no blog posts).
+- There are cosmetic changes (ADHD-friendly code highlighting, larger font, larger page)
+- Code is now correctly indented
+- Wikilinks, but also alt-text wikilinks (with transclusion!) are usable.
 
-### Jekyll Themes
+## How do I use this?
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/AnaelBerrouet/AnaelBerrouet.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+You can click on this link and let the deploy-to-netlify-for-free-script do the rest !
 
-### Support or Contact
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/Maxence-L/notenote.link)
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+Follow the [How to setup this site](https://notenote.link/notes/how-to-setup-this-site) guide, written by [raghuveerdotnet](https://github.com/raghuveerdotnet) and then adapted for this fork.
+
+If you want to use it with Github Pages, it is possible, [please read this](https://github.com/Maxence-L/notenote.link/issues/5#issuecomment-762508069).
+
+## How can I participate?
+
+Open an issue to share feedback or propose features. Star the repo if you like it! 🌟
+
+## How do I customize this for my needs?
+
+Things to modify to make it yours:
+
+- Meta content in [\_layouts/post.html](_layouts/post.html):
+    ```html
+    <meta content="My linked notebook" property="og:site_name"/>
+    ```
+- The favicon and profile are here: [assets/img/](assets/img/)
+- The main stuff is in [\_config.yml](_config.yml):
+    ```yaml
+    title: notenotelink.netlify.com
+    name: notenote.link
+    user_description: My linked notebook
+
+    notes_url: "https://notenotelink.netlify.com/"
+    profile_pic: /assets/img/profile.png
+    favicon: /assets/img/favicon.png
+    copyright_name: MIT
+
+    baseurl: "/" # the subpath of your site, e.g. /blog
+    url: "https://notenotelink.netlify.com/" # the base hostname & protocol for your site, e.g. http://example.com
+    encoding: utf-8
+    ```
+- You may want to change the copyright in [\_includes/footer.html](_includes/footer.html):
+   ```html
+   <p id="copyright-notice">Licence MIT</p>
+   ```
+
+## How do I remove the "seasons" feature for the notes?
+
+Delete what's inside [\_includes/feed.html](_includes/feed.html) and replace it with:
+
+```liquid
+{%- if page.permalink == "/" -%}
+    {%- for item in site.notes -%}
+        <div class="feed-title-excerpt-block disable-select" data-url="{{site.url}}{{item.url}}">
+            <a href="{{ item.url }}" style="text-decoration: none; color: #555555;">
+            {%- if item.status == "Ongoing" or item.status == "ongoing" -%}
+                <ul style="padding-left: 20px; margin-top: 20px;" class="tags">
+                    <li style="padding: 0 5px; border-radius: 10px;" class="tag"><b>Status: </b>{{item.status | capitalize }}</li>
+                </ul>
+                <p style="margin-top: 0px;" class="feed-title">{{ item.title }}</p>
+            {%- else -%}
+                <p class="feed-title">{{ item.title }}</p>
+            {%- endif -%}
+                <p class="feed-excerpt">{{ item.content | strip_html | strip | escape | truncate: 200}}</p>
+            </a>
+        </div>
+    {%- endfor -%}
+{%- endif -%}
+````
+
+On command-line, you can run `bundle exec jekyll serve` then go to `localhost:4000` to check the result.
+
+## What's coming?
+
+- [Open-transclude](https://subpixel.space/entries/open-transclude/) integration in the template, if possible.
+- Different themes! - Please tell me which you'd like to have!
